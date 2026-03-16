@@ -258,7 +258,7 @@ export default function NotesPage() {
 
           {/* HEADER ROW */}
 
-          <div className="sticky top-[64px] z-30 grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/95 backdrop-blur text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700">
+          <div className="sticky top-[80px] z-30 grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/95 backdrop-blur text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700">
 
             <div className="text-center">لوحة التحكم</div>
             <div className="text-center">عدد الملاحظات</div>
