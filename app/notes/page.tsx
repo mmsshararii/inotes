@@ -241,26 +241,25 @@ export default function NotesPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-slate-800 border border-slate-700 gap-2 p-1">
             <TabsTrigger
-              value="all"
-              className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
-            >
-              <span className="mr-2">All Notes</span>
-              <span className="font-arabic">المنشورات</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="edited"
-              className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
-            >
-              <span className="mr-2">Edited Notes</span>
-              <span className="font-arabic">المنشورات المعدلة</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="deleted"
-              className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
-            >
-              <span className="mr-2">Deleted Notes</span>
-              <span className="font-arabic">المنشورات المحذوفة</span>
-            </TabsTrigger>
+  value="all"
+  className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
+>
+  الملاحظات العامة
+</TabsTrigger>
+
+<TabsTrigger
+  value="edited"
+  className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
+>
+  الملاحظات المعدلة
+</TabsTrigger>
+
+<TabsTrigger
+  value="deleted"
+  className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
+>
+  الملاحظات المحذوفة
+</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="space-y-4">
@@ -315,7 +314,7 @@ export default function NotesPage() {
 
   </div>
 
-
+<div style={{color:'red'}}>TEST HEADER</div>
   {/* الصفوف */}
   {paginatedNotes.map((note) => (
     <NoteRow
