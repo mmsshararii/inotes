@@ -302,17 +302,35 @@ export default function NotesPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {paginatedNotes.map((note) => (
-                    <NoteCard
-                      key={note.id}
-                      id={note.id}
-                      title={note.title}
-                      authorUsername={note.author_username}
-                      createdAt={note.created_at}
-                    />
-                  ))}
-                </div>
+                <div className="bg-slate-900 border border-slate-700 rounded-lg overflow-hidden">
+
+  {/* صف العناوين */}
+  <div className="grid grid-cols-[2fr_1fr_1fr_120px_150px] bg-slate-800 text-slate-300 text-sm font-semibold px-2 py-3">
+
+    <div>عنوان الملاحظة</div>
+    <div className="text-center">المسؤول</div>
+    <div className="text-center">تاريخ النشر</div>
+    <div className="text-center">عدد الملاحظات</div>
+    <div className="text-center">لوحة التحكم</div>
+
+  </div>
+
+
+  {/* الصفوف */}
+  {paginatedNotes.map((note) => (
+    <NoteRow
+      key={note.id}
+      id={note.id}
+      title={note.title}
+      author={note.author_username}
+      createdAt={note.created_at}
+      entriesCount={0}
+      onEdit={(id) => router.push(`/notes/${id}`)}
+      onDelete={(id) => console.log("delete", id)}
+    />
+  ))}
+
+</div>
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
