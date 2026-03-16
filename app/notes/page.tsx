@@ -128,6 +128,38 @@ export default function NotesPage() {
     setIsCreating(false)
   }
 
+  const handleEditTitle = async (id: string, newTitle: string) => {
+    const { error } = await supabase
+      .from('notes')
+      .update({ title: newTitle })
+      .eq('id', id)
+
+    if (error) {
+      console.error('Error updating note title:', error)
+      return
+    }
+
+    setNotes((prev) =>
+      prev.map((note) =>
+        note.id === id ? { ...note, title: newTitle } : note
+      )
+    )
+  }
+
+  const handleSoftDelete = async (id: string) => {
+    const { error } = await supabase
+      .from('notes')
+      .update({ deleted: true })
+      .eq('id', id)
+
+    if (error) {
+      console.error('Error soft deleting note:', error)
+      return
+    }
+
+    setNotes((prev) => prev.filter((note) => note.id !== id))
+  }
+
   const filteredNotes = notes.filter((note) => {
     const matchesSearch = note.title
       .toLowerCase()
@@ -158,10 +190,7 @@ export default function NotesPage() {
   return (
     <div dir="rtl" className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
-      {/* الكتلة الثابتة كاملة */}
       <div className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-700">
-
-        {/* الهيدر */}
         <div className="border-b border-slate-700">
           <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
@@ -200,7 +229,6 @@ export default function NotesPage() {
           </div>
         </div>
 
-        {/* بقية المستطيل الثابت بدون فراغ سفلي */}
         <div className="max-w-7xl mx-auto px-4 pt-6 pb-0 space-y-6">
 
           <div className="flex justify-between items-center">
@@ -260,8 +288,7 @@ export default function NotesPage() {
             </TabsList>
           </Tabs>
 
-          {/* صف العناوين - من اليمين إلى اليسار */}
-          <div className="grid grid-cols-[2fr_1fr_1fr_120px_150px] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
+          <div className="grid grid-cols-[2fr_1fr_1fr_120px_180px] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
             <div className="text-right">عنوان الملاحظة</div>
             <div className="text-center">المسؤول</div>
             <div className="text-center">تاريخ النشر</div>
@@ -272,7 +299,6 @@ export default function NotesPage() {
         </div>
       </div>
 
-      {/* الصفوف تتحرك مباشرة أسفل الجدول بدون فراغ */}
       <div className="max-w-7xl mx-auto px-4 pb-8 mt-0">
         {paginatedNotes.map((note) => (
           <NoteRow
@@ -282,8 +308,8 @@ export default function NotesPage() {
             author={note.author_username}
             createdAt={note.created_at}
             entriesCount={note.note_entries?.[0]?.count || 0}
-            onEdit={(id) => router.push(`/notes/${id}`)}
-            onDelete={(id) => console.log('delete', id)}
+            onEdit={handleEditTitle}
+            onDelete={handleSoftDelete}
           />
         ))}
 
