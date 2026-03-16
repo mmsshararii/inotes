@@ -7,7 +7,15 @@ import { SearchBar } from '@/components/SearchBar'
 import { Pagination } from '@/components/Pagination'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Plus, LogOut, Code as Code2 } from 'lucide-react'
@@ -26,7 +34,6 @@ interface Note {
 }
 
 export default function NotesPage() {
-
   const { user, profile, loading, signOut } = useAuth()
   const router = useRouter()
 
@@ -51,7 +58,7 @@ export default function NotesPage() {
   }, [user, activeTab])
 
   const fetchNotes = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .select(`
         id,
@@ -64,14 +71,23 @@ export default function NotesPage() {
       .eq('deleted', activeTab === 'deleted')
       .order('created_at', { ascending: false })
 
+    if (error) {
+      console.error('Error fetching notes:', error)
+      return
+    }
+
     setNotes(data || [])
   }
 
   const fetchEditedNotes = async () => {
-
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('entry_edits')
       .select('entry_id, note_entries(note_id)')
+
+    if (error) {
+      console.error('Error fetching edited notes:', error)
+      return
+    }
 
     const noteIds = new Set(
       data
@@ -83,12 +99,11 @@ export default function NotesPage() {
   }
 
   const handleCreateNote = async () => {
-
     if (!newNoteTitle.trim() || !profile) return
 
     setIsCreating(true)
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('notes')
       .insert({
         title: newNoteTitle,
@@ -97,15 +112,19 @@ export default function NotesPage() {
       .select()
       .single()
 
+    if (error) {
+      console.error('Error creating note:', error)
+      setIsCreating(false)
+      return
+    }
+
     setIsCreateDialogOpen(false)
     setNewNoteTitle('')
     router.push(`/notes/${data.id}`)
-
     setIsCreating(false)
   }
 
   const filteredNotes = notes.filter((note) => {
-
     const matchesSearch = note.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
@@ -127,205 +146,191 @@ export default function NotesPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <div className="text-white text-lg">Loading...</div>
+        <div className="text-white text-lg">جاري التحميل...</div>
       </div>
     )
   }
 
   return (
-
     <div dir="rtl" className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
-      {/* HEADER */}
+      {/* الكتلة كاملة الثابتة */}
+      <div className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-700">
 
-      <div className="sticky top-0 z-40 border-b border-slate-700 bg-slate-900/80 backdrop-blur">
+        {/* الهيدر العلوي */}
+        <div className="border-b border-slate-700">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-
-          <div
-            className="flex items-center gap-3 cursor-pointer"
-            onClick={() => router.push('/notes')}
-          >
-            <div className="bg-blue-600 p-2 rounded-lg">
-              <Code2 className="h-6 w-6 text-white" />
-            </div>
-
-            <div>
-              <h1 className="text-2xl font-bold text-white">inotes</h1>
-              <p className="text-sm text-slate-400">
-                Developer Knowledge System
-              </p>
-            </div>
-
-          </div>
-
-          <div className="flex items-center gap-4">
-
-            <span className="text-slate-300">
-              Welcome <b>{profile?.username}</b>
-            </span>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={signOut}
-              className="bg-slate-800 border-slate-700 text-slate-200"
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => router.push('/notes')}
             >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* MAIN */}
-
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-
-        <div className="flex justify-between items-center">
-
-          <h2 className="text-3xl font-bold text-white">Notes</h2>
-
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-
-            <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                <Plus className="h-4 w-4 mr-2" />
-                Create New Note
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="bg-slate-800 border-slate-700">
-
-              <DialogHeader>
-                <DialogTitle className="text-white">
-                  Create New Note
-                </DialogTitle>
-                <DialogDescription className="text-slate-400">
-                  Enter note title
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="space-y-2">
-
-                <Label className="text-slate-200">
-                  Note Title
-                </Label>
-
-                <Input
-                  value={newNoteTitle}
-                  onChange={(e) => setNewNoteTitle(e.target.value)}
-                  className="bg-slate-900 border-slate-700 text-white"
-                />
-
+              <div className="bg-blue-600 p-2 rounded-lg">
+                <Code2 className="h-6 w-6 text-white" />
               </div>
 
-              <DialogFooter>
+              <div>
+                <h1 className="text-2xl font-bold text-white">inotes</h1>
+                <p className="text-sm text-slate-400">
+                  Developer Knowledge System
+                </p>
+              </div>
+            </div>
 
-                <Button
-                  onClick={handleCreateNote}
-                  disabled={!newNoteTitle.trim() || isCreating}
-                  className="bg-blue-600"
-                >
-                  {isCreating ? 'Creating...' : 'Create'}
-                </Button>
+            <div className="flex items-center gap-4">
+              <span className="text-slate-300">
+                مرحبًا <b>{profile?.username}</b>
+              </span>
 
-              </DialogFooter>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={signOut}
+                className="bg-slate-800 border-slate-700 text-slate-200"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                تسجيل الخروج
+              </Button>
+            </div>
 
-            </DialogContent>
-
-          </Dialog>
-
+          </div>
         </div>
 
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-        />
+        {/* بقية الكتلة التي تريدها ثابتة */}
+        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <div className="flex justify-between items-center">
+            <h2 className="text-3xl font-bold text-white">الملاحظات</h2>
 
-          <TabsList className="bg-slate-800 border border-slate-700">
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  إضافة ملاحظة جديدة
+                </Button>
+              </DialogTrigger>
 
-            <TabsTrigger value="all">الملاحظات العامة</TabsTrigger>
-            <TabsTrigger value="edited">الملاحظات المعدلة</TabsTrigger>
-            <TabsTrigger value="deleted">الملاحظات المحذوفة</TabsTrigger>
+              <DialogContent className="bg-slate-800 border-slate-700">
+                <DialogHeader>
+                  <DialogTitle className="text-white">
+                    إضافة ملاحظة جديدة
+                  </DialogTitle>
+                  <DialogDescription className="text-slate-400">
+                    أدخل عنوان الملاحظة
+                  </DialogDescription>
+                </DialogHeader>
 
-          </TabsList>
+                <div className="space-y-2">
+                  <Label className="text-slate-200">عنوان الملاحظة</Label>
 
-          {/* HEADER ROW */}
+                  <Input
+                    value={newNoteTitle}
+                    onChange={(e) => setNewNoteTitle(e.target.value)}
+                    className="bg-slate-900 border-slate-700 text-white"
+                  />
+                </div>
 
-          <div className="sticky top-[80px] z-30 grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/95 backdrop-blur text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700">
+                <DialogFooter>
+                  <Button
+                    onClick={handleCreateNote}
+                    disabled={!newNoteTitle.trim() || isCreating}
+                    className="bg-blue-600"
+                  >
+                    {isCreating ? 'جاري الإنشاء...' : 'إضافة'}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
 
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+          />
+
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="bg-slate-800 border border-slate-700">
+              <TabsTrigger value="all">الملاحظات العامة</TabsTrigger>
+              <TabsTrigger value="edited">الملاحظات المعدلة</TabsTrigger>
+              <TabsTrigger value="deleted">الملاحظات المحذوفة</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          {/* صف العناوين */}
+          <div className="grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
             <div className="text-center">لوحة التحكم</div>
             <div className="text-center">عدد الملاحظات</div>
             <div className="text-center">تاريخ النشر</div>
             <div className="text-center">المسؤول</div>
             <div className="text-right">عنوان الملاحظة</div>
-
           </div>
 
-          <TabsContent value="all">
-            {paginatedNotes.map((note) => (
-              <NoteRow
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                author={note.author_username}
-                createdAt={note.created_at}
-                entriesCount={note.note_entries?.[0]?.count || 0}
-                onEdit={(id) => router.push(`/notes/${id}`)}
-                onDelete={(id) => console.log('delete', id)}
-              />
-            ))}
-          </TabsContent>
-
-          <TabsContent value="edited">
-            {paginatedNotes.map((note) => (
-              <NoteRow
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                author={note.author_username}
-                createdAt={note.created_at}
-                entriesCount={0}
-                onEdit={(id) => router.push(`/notes/${id}`)}
-                onDelete={(id) => console.log('delete', id)}
-              />
-            ))}
-          </TabsContent>
-
-          <TabsContent value="deleted">
-            {paginatedNotes.map((note) => (
-              <NoteRow
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                author={note.author_username}
-                createdAt={note.created_at}
-                entriesCount={note.note_entries?.[0]?.count || 0}
-                onEdit={(id) => router.push(`/notes/${id}`)}
-                onDelete={(id) => console.log('delete', id)}
-              />
-            ))}
-          </TabsContent>
-
-        </Tabs>
-
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-
+        </div>
       </div>
 
-    </div>
+      {/* الصفوف فقط تتحرك */}
+      <div className="max-w-7xl mx-auto px-4 pb-8">
+        {activeTab === 'all' && (
+          <>
+            {paginatedNotes.map((note) => (
+              <NoteRow
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                author={note.author_username}
+                createdAt={note.created_at}
+                entriesCount={note.note_entries?.[0]?.count || 0}
+                onEdit={(id) => router.push(`/notes/${id}`)}
+                onDelete={(id) => console.log('delete', id)}
+              />
+            ))}
+          </>
+        )}
 
+        {activeTab === 'edited' && (
+          <>
+            {paginatedNotes.map((note) => (
+              <NoteRow
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                author={note.author_username}
+                createdAt={note.created_at}
+                entriesCount={note.note_entries?.[0]?.count || 0}
+                onEdit={(id) => router.push(`/notes/${id}`)}
+                onDelete={(id) => console.log('delete', id)}
+              />
+            ))}
+          </>
+        )}
+
+        {activeTab === 'deleted' && (
+          <>
+            {paginatedNotes.map((note) => (
+              <NoteRow
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                author={note.author_username}
+                createdAt={note.created_at}
+                entriesCount={note.note_entries?.[0]?.count || 0}
+                onEdit={(id) => router.push(`/notes/${id}`)}
+                onDelete={(id) => console.log('delete', id)}
+              />
+            ))}
+          </>
+        )}
+
+        {totalPages > 1 && (
+          <div className="pt-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
