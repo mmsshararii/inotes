@@ -193,6 +193,19 @@ export default function NotesPage() {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
+                <div className="flex items-center justify-between text-slate-400 text-sm border-b border-slate-700 pb-2 mb-2">
+
+  <div className="flex-1">Title</div>
+
+  <div className="w-40 text-center">Author</div>
+
+  <div className="w-40 text-center">Date</div>
+
+  <div className="w-24 text-center">Entries</div>
+
+  <div className="w-32 text-right">Actions</div>
+
+</div>
                   <div className="space-y-2">
                     <Label htmlFor="title" className="text-slate-200">
                       Note Title
