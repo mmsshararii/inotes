@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus, LogOut, Code as Code2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
+import NoteRow from '@/ui/components/NoteRow'
 const NOTES_PER_PAGE = 30;
 
 interface Note {
@@ -22,6 +22,7 @@ interface Note {
   author_username: string;
   created_at: string;
   deleted: boolean;
+  note_entries: { count: number }[];
 }
 
 export default function NotesPage() {
@@ -52,10 +53,17 @@ export default function NotesPage() {
   const fetchNotes = async () => {
     try {
       const { data, error } = await supabase
-        .from('notes')
-        .select('*')
-        .eq('deleted', activeTab === 'deleted')
-        .order('created_at', { ascending: false });
+  .from('notes')
+  .select(`
+    id,
+    title,
+    author_username,
+    created_at,
+    deleted,
+    note_entries(count)
+  `)
+  .eq('deleted', activeTab === 'deleted')
+  .order('created_at', { ascending: false });
 
       if (error) throw error;
       setNotes(data || []);
@@ -246,17 +254,20 @@ export default function NotesPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {paginatedNotes.map((note) => (
-                    <NoteCard
-                      key={note.id}
-                      id={note.id}
-                      title={note.title}
-                      authorUsername={note.author_username}
-                      createdAt={note.created_at}
-                    />
-                  ))}
-                </div>
+                <div className="space-y-2">
+  {paginatedNotes.map((note) => (
+    <NoteRow
+      key={note.id}
+      id={note.id}
+      title={note.title}
+      author={note.author_username}
+      createdAt={note.created_at}
+      entriesCount={note.note_entries?.[0]?.count || 0}
+      onEdit={(id) => router.push(`/notes/${id}`)}
+      onDelete={(id) => console.log("delete", id)}
+    />
+  ))}
+</div>
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
