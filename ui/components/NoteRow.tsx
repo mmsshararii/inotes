@@ -1,5 +1,8 @@
 'use client'
 
+import { Pencil, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+
 type NoteRowProps = {
   id: string
   title: string
@@ -20,44 +23,67 @@ export default function NoteRow({
   onDelete
 }: NoteRowProps) {
 
-  return (
-    <div className="flex items-center justify-between border-b border-slate-700 py-3 px-2 hover:bg-slate-800 transition">
+  const router = useRouter()
 
-      {/* Title */}
-      <div className="flex-1 font-medium text-white">
+  return (
+
+    <div
+      className="grid grid-cols-[2fr_1fr_1fr_120px_150px] items-center border-b border-slate-700 py-3 px-2 hover:bg-slate-800 transition"
+    >
+
+      {/* عنوان الملاحظة */}
+      <div
+        className="text-white font-medium cursor-pointer"
+        onClick={() => router.push(`/notes/${id}`)}
+      >
         {title}
       </div>
 
-      {/* Author */}
-      <div className="w-40 text-slate-400 text-sm">
+
+      {/* المسؤول */}
+      <div className="text-slate-400 text-sm text-center">
         {author}
       </div>
 
-      {/* Date */}
-      <div className="w-40 text-slate-400 text-sm">
+
+      {/* التاريخ */}
+      <div className="text-slate-400 text-sm text-center">
         {new Date(createdAt).toLocaleDateString()}
       </div>
 
-      {/* Entries */}
-      <div className="w-24 text-slate-400 text-sm text-center">
+
+      {/* عدد الملاحظات */}
+      <div className="text-slate-400 text-sm text-center">
         {entriesCount}
       </div>
 
-      {/* Actions */}
-      <div className="flex gap-3 w-32 justify-end">
-        <button
-          onClick={() => onEdit(id)}
-          className="text-blue-400 hover:text-blue-300 text-sm"
-        >
-          Edit
-        </button>
+
+      {/* لوحة التحكم */}
+      <div className="flex gap-4 justify-center">
 
         <button
-          onClick={() => onDelete(id)}
-          className="text-red-400 hover:text-red-300 text-sm"
+          onClick={(e) => {
+            e.stopPropagation()
+            onEdit(id)
+          }}
+          className="flex items-center gap-1 text-blue-400 hover:text-blue-300 text-sm"
         >
-          Delete
+          <Pencil size={16}/>
+          تعديل
         </button>
+
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onDelete(id)
+          }}
+          className="flex items-center gap-1 text-red-400 hover:text-red-300 text-sm"
+        >
+          <Trash2 size={16}/>
+          حذف
+        </button>
+
       </div>
 
     </div>
