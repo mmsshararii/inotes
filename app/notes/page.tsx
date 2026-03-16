@@ -143,11 +143,14 @@ export default function NotesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div dir="rtl" className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="border-b border-slate-700 bg-slate-900/50 backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div
+  className="flex items-center gap-3 cursor-pointer"
+  onClick={() => router.push('/notes')}
+>
               <div className="bg-blue-600 p-2 rounded-lg">
                 <Code2 className="h-6 w-6 text-white" />
               </div>
@@ -236,24 +239,24 @@ export default function NotesPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="bg-slate-800 border border-slate-700">
+          <TabsList className="bg-slate-800 border border-slate-700 gap-2 p-1">
             <TabsTrigger
               value="all"
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
+              className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
             >
               <span className="mr-2">All Notes</span>
               <span className="font-arabic">المنشورات</span>
             </TabsTrigger>
             <TabsTrigger
               value="edited"
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
+              className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
             >
               <span className="mr-2">Edited Notes</span>
               <span className="font-arabic">المنشورات المعدلة</span>
             </TabsTrigger>
             <TabsTrigger
               value="deleted"
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
+              className="px-4 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white text-slate-300"
             >
               <span className="mr-2">Deleted Notes</span>
               <span className="font-arabic">المنشورات المحذوفة</span>
