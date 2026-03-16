@@ -138,7 +138,7 @@ export default function NotesPage() {
 
       {/* HEADER */}
 
-      <div className="border-b border-slate-700 bg-slate-900/50 backdrop-blur">
+      <div className="sticky top-0 z-40 border-b border-slate-700 bg-slate-900/80 backdrop-blur">
 
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
@@ -258,7 +258,7 @@ export default function NotesPage() {
 
           {/* HEADER ROW */}
 
-          <div className="sticky top-0 z-10 grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/90 backdrop-blur text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700">
+          <div className="sticky top-[64px] z-30 grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/95 backdrop-blur text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700">
 
             <div className="text-center">لوحة التحكم</div>
             <div className="text-center">عدد الملاحظات</div>
@@ -268,12 +268,8 @@ export default function NotesPage() {
 
           </div>
 
-          {/* ALL */}
-
           <TabsContent value="all">
-
             {paginatedNotes.map((note) => (
-
               <NoteRow
                 key={note.id}
                 id={note.id}
@@ -284,17 +280,11 @@ export default function NotesPage() {
                 onEdit={(id) => router.push(`/notes/${id}`)}
                 onDelete={(id) => console.log('delete', id)}
               />
-
             ))}
-
           </TabsContent>
 
-          {/* EDITED */}
-
           <TabsContent value="edited">
-
             {paginatedNotes.map((note) => (
-
               <NoteRow
                 key={note.id}
                 id={note.id}
@@ -305,17 +295,11 @@ export default function NotesPage() {
                 onEdit={(id) => router.push(`/notes/${id}`)}
                 onDelete={(id) => console.log('delete', id)}
               />
-
             ))}
-
           </TabsContent>
 
-          {/* DELETED */}
-
           <TabsContent value="deleted">
-
             {paginatedNotes.map((note) => (
-
               <NoteRow
                 key={note.id}
                 id={note.id}
@@ -326,9 +310,7 @@ export default function NotesPage() {
                 onEdit={(id) => router.push(`/notes/${id}`)}
                 onDelete={(id) => console.log('delete', id)}
               />
-
             ))}
-
           </TabsContent>
 
         </Tabs>
