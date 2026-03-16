@@ -348,17 +348,20 @@ export default function NotesPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {paginatedNotes.map((note) => (
-                    <NoteCard
-                      key={note.id}
-                      id={note.id}
-                      title={note.title}
-                      authorUsername={note.author_username}
-                      createdAt={note.created_at}
-                    />
-                  ))}
-                </div>
+                <div className="space-y-2">
+  {paginatedNotes.map((note) => (
+    <NoteRow
+      key={note.id}
+      id={note.id}
+      title={note.title}
+      author={note.author_username}
+      createdAt={note.created_at}
+      entriesCount={note.note_entries?.[0]?.count || 0}
+      onEdit={(id) => router.push(`/notes/${id}`)}
+      onDelete={(id) => console.log("delete", id)}
+    />
+  ))}
+</div>
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
