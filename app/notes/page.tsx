@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'
 import { SearchBar } from '@/components/SearchBar'
 import { Pagination } from '@/components/Pagination'
 import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Dialog,
   DialogContent,
@@ -56,6 +56,10 @@ export default function NotesPage() {
       fetchEditedNotes()
     }
   }, [user, activeTab])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [activeTab, searchQuery])
 
   const fetchNotes = async () => {
     const { data, error } = await supabase
@@ -154,10 +158,10 @@ export default function NotesPage() {
   return (
     <div dir="rtl" className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
-      {/* الكتلة كاملة الثابتة */}
+      {/* الكتلة الثابتة كاملة */}
       <div className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-700">
 
-        {/* الهيدر العلوي */}
+        {/* الهيدر */}
         <div className="border-b border-slate-700">
           <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
@@ -188,7 +192,7 @@ export default function NotesPage() {
                 onClick={signOut}
                 className="bg-slate-800 border-slate-700 text-slate-200"
               >
-                <LogOut className="h-4 w-4 mr-2" />
+                <LogOut className="h-4 w-4 ml-2" />
                 تسجيل الخروج
               </Button>
             </div>
@@ -196,8 +200,8 @@ export default function NotesPage() {
           </div>
         </div>
 
-        {/* بقية الكتلة التي تريدها ثابتة */}
-        <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        {/* بقية المستطيل الثابت بدون فراغ سفلي */}
+        <div className="max-w-7xl mx-auto px-4 pt-6 pb-0 space-y-6">
 
           <div className="flex justify-between items-center">
             <h2 className="text-3xl font-bold text-white">الملاحظات</h2>
@@ -205,7 +209,7 @@ export default function NotesPage() {
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 ml-2" />
                   إضافة ملاحظة جديدة
                 </Button>
               </DialogTrigger>
@@ -236,7 +240,7 @@ export default function NotesPage() {
                     disabled={!newNoteTitle.trim() || isCreating}
                     className="bg-blue-600"
                   >
-                    {isCreating ? 'جاري الإنشاء...' : 'إضافة'}
+                    {isCreating ? 'جاري الإضافة...' : 'إضافة'}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -256,70 +260,32 @@ export default function NotesPage() {
             </TabsList>
           </Tabs>
 
-          {/* صف العناوين */}
-          <div className="grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
-            <div className="text-center">لوحة التحكم</div>
-            <div className="text-center">عدد الملاحظات</div>
-            <div className="text-center">تاريخ النشر</div>
-            <div className="text-center">المسؤول</div>
+          {/* صف العناوين - من اليمين إلى اليسار */}
+          <div className="grid grid-cols-[2fr_1fr_1fr_120px_150px] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
             <div className="text-right">عنوان الملاحظة</div>
+            <div className="text-center">المسؤول</div>
+            <div className="text-center">تاريخ النشر</div>
+            <div className="text-center">عدد الملاحظات</div>
+            <div className="text-center">لوحة التحكم</div>
           </div>
 
         </div>
       </div>
 
-      {/* الصفوف فقط تتحرك */}
-      <div className="max-w-7xl mx-auto px-4 pb-8">
-        {activeTab === 'all' && (
-          <>
-            {paginatedNotes.map((note) => (
-              <NoteRow
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                author={note.author_username}
-                createdAt={note.created_at}
-                entriesCount={note.note_entries?.[0]?.count || 0}
-                onEdit={(id) => router.push(`/notes/${id}`)}
-                onDelete={(id) => console.log('delete', id)}
-              />
-            ))}
-          </>
-        )}
-
-        {activeTab === 'edited' && (
-          <>
-            {paginatedNotes.map((note) => (
-              <NoteRow
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                author={note.author_username}
-                createdAt={note.created_at}
-                entriesCount={note.note_entries?.[0]?.count || 0}
-                onEdit={(id) => router.push(`/notes/${id}`)}
-                onDelete={(id) => console.log('delete', id)}
-              />
-            ))}
-          </>
-        )}
-
-        {activeTab === 'deleted' && (
-          <>
-            {paginatedNotes.map((note) => (
-              <NoteRow
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                author={note.author_username}
-                createdAt={note.created_at}
-                entriesCount={note.note_entries?.[0]?.count || 0}
-                onEdit={(id) => router.push(`/notes/${id}`)}
-                onDelete={(id) => console.log('delete', id)}
-              />
-            ))}
-          </>
-        )}
+      {/* الصفوف تتحرك مباشرة أسفل الجدول بدون فراغ */}
+      <div className="max-w-7xl mx-auto px-4 pb-8 mt-0">
+        {paginatedNotes.map((note) => (
+          <NoteRow
+            key={note.id}
+            id={note.id}
+            title={note.title}
+            author={note.author_username}
+            createdAt={note.created_at}
+            entriesCount={note.note_entries?.[0]?.count || 0}
+            onEdit={(id) => router.push(`/notes/${id}`)}
+            onDelete={(id) => console.log('delete', id)}
+          />
+        ))}
 
         {totalPages > 1 && (
           <div className="pt-6">
