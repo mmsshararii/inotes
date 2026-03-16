@@ -304,17 +304,17 @@ export default function NotesPage() {
                 <div className="bg-slate-900 border border-slate-700 rounded-lg overflow-hidden">
 
   {/* صف العناوين */}
-  <div className="grid grid-cols-[2fr_1fr_1fr_120px_150px] bg-slate-800 text-slate-300 text-sm font-semibold px-2 py-3">
+  <div className="grid grid-cols-[150px_120px_1fr_1fr_2fr] bg-slate-800 text-slate-300 text-sm font-semibold px-3 py-3">
 
-    <div>عنوان الملاحظة</div>
-    <div className="text-center">المسؤول</div>
-    <div className="text-center">تاريخ النشر</div>
-    <div className="text-center">عدد الملاحظات</div>
-    <div className="text-center">لوحة التحكم</div>
+  <div className="text-center">لوحة التحكم</div>
+  <div className="text-center">عدد الملاحظات</div>
+  <div className="text-center">تاريخ النشر</div>
+  <div className="text-center">المسؤول</div>
+  <div className="text-right">عنوان الملاحظة</div>
 
-  </div>
+</div>
 
-<div style={{color:'red'}}>TEST HEADER</div>
+
   {/* الصفوف */}
   {paginatedNotes.map((note) => (
     <NoteRow

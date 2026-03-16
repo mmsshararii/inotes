@@ -27,9 +27,7 @@ export default function NoteRow({
 
   return (
 
-    <div
-      className="grid grid-cols-[2fr_1fr_1fr_120px_150px] items-center border-b border-slate-700 py-3 px-2 hover:bg-slate-800 transition"
-    >
+    <div className="grid grid-cols-[150px_120px_1fr_1fr_2fr] items-center border-b border-slate-700 py-3 px-2">
 
       {/* عنوان الملاحظة */}
       <div
@@ -40,26 +38,24 @@ export default function NoteRow({
       </div>
 
 
-      {/* المسؤول */}
-      <div className="text-slate-400 text-sm text-center">
-        {author}
-      </div>
+{/* لوحة التحكم */}
+<div className="flex gap-4 justify-center">
+  تعديل | حذف
+</div>
 
+{/* عدد الملاحظات */}
+<div className="text-center">{entriesCount}</div>
 
-      {/* التاريخ */}
-      <div className="text-slate-400 text-sm text-center">
-        {new Date(createdAt).toLocaleDateString()}
-      </div>
+{/* التاريخ */}
+<div className="text-center">
+  {new Date(createdAt).toLocaleDateString('ar-SA')}
+</div>
 
+{/* المسؤول */}
+<div className="text-center">{author}</div>
 
-      {/* عدد الملاحظات */}
-      <div className="text-slate-400 text-sm text-center">
-        {entriesCount}
-      </div>
-
-
-      {/* لوحة التحكم */}
-      <div className="flex gap-4 justify-center">
+{/* العنوان */}
+<div className="text-right cursor-pointer">{title}</div>
 
         <button
           onClick={(e) => {
