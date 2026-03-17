@@ -47,7 +47,8 @@ export default function NoteRow({
       setIsSaving(false)
     }
   }
-     {/* عنوان الحذف */}<DeleteNoteDialog
+     {/* عنوان الحذف */}
+<DeleteNoteDialog
   noteId={id}
   noteTitle={title}
   onConfirm={onDelete}
@@ -125,18 +126,7 @@ export default function NoteRow({
             تعديل
           </button>
         )}
-
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            handleDelete()
-          }}
-          disabled={isDeleting}
-          className="flex items-center gap-1 text-red-400 hover:text-red-300 text-sm disabled:opacity-50"
-        >
-          <Trash2 size={16} />
-          حذف
-        </button>
+        
       </div>
     </div>
   )
