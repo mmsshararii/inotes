@@ -1,5 +1,5 @@
 'use client'
-
+import DeleteNoteDialog from '@/ui/components/DeleteNoteDialog'
 import { useState } from 'react'
 import { Pencil, Trash2, Check, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -47,18 +47,11 @@ export default function NoteRow({
       setIsSaving(false)
     }
   }
-
-  const handleDelete = async () => {
-    const confirmed = window.confirm('هل تريد نقل هذه الملاحظة إلى المحذوفات؟')
-    if (!confirmed) return
-
-    setIsDeleting(true)
-    try {
-      await onDelete(id)
-    } finally {
-      setIsDeleting(false)
-    }
-  }
+     {/* عنوان الحذف */}<DeleteNoteDialog
+  noteId={id}
+  noteTitle={title}
+  onConfirm={onDelete}
+/>
 
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_120px_180px] items-center border-b border-slate-700 py-3 px-3 hover:bg-slate-800/40 transition">
