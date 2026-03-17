@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil, Check, X } from 'lucide-react'
+import { Pencil, CheckCircle2, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import DeleteNoteDialog from '@/ui/components/DeleteNoteDialog'
 
@@ -50,7 +50,7 @@ export default function NoteRow({
   }
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1fr_120px_180px] items-center border-b border-slate-700 py-3 px-3 hover:bg-slate-800/40 transition">
+    <div className="grid grid-cols-[minmax(320px,2.6fr)_130px_150px_110px_170px] items-center border-b border-slate-700 py-3 px-3 hover:bg-slate-800/40 transition">
 
       {/* عنوان الملاحظة */}
       <div className="text-right">
@@ -64,23 +64,25 @@ export default function NoteRow({
             />
 
             <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex items-center gap-1 text-green-400 hover:text-green-300 text-sm"
-            >
-              <Check size={16} />
-            </button>
+  onClick={handleSave}
+  disabled={isSaving}
+  className="flex items-center justify-center rounded-md bg-green-600/15 px-2 py-2 text-green-400 hover:bg-green-600/25 hover:text-green-300 disabled:opacity-50"
+  title="حفظ التعديل"
+>
+  <CheckCircle2 size={20} strokeWidth={2.4} />
+</button>
 
             <button
-              onClick={() => {
-                setIsEditing(false)
-                setEditValue(title)
-              }}
-              disabled={isSaving}
-              className="flex items-center gap-1 text-slate-400 hover:text-slate-300 text-sm"
-            >
-              <X size={16} />
-            </button>
+  onClick={() => {
+    setIsEditing(false)
+    setEditValue(title)
+  }}
+  disabled={isSaving}
+  className="flex items-center justify-center rounded-md bg-slate-700/40 px-2 py-2 text-slate-300 hover:bg-slate-700/60 hover:text-white disabled:opacity-50"
+  title="إلغاء"
+>
+  <X size={18} strokeWidth={2.4} />
+</button>
           </div>
         ) : (
           <div

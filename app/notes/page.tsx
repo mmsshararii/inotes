@@ -288,7 +288,7 @@ export default function NotesPage() {
             </TabsList>
           </Tabs>
 
-          <div className="grid grid-cols-[2fr_1fr_1fr_120px_180px] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
+          <div className="grid grid-cols-[minmax(320px,2.6fr)_130px_150px_110px_170px] bg-slate-800/95 text-slate-300 text-sm font-semibold px-3 py-3 border-b border-slate-700 rounded-t-lg">
             <div className="text-right">عنوان الملاحظة</div>
             <div className="text-center">المسؤول</div>
             <div className="text-center">تاريخ النشر</div>
