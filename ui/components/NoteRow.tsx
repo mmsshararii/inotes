@@ -1,8 +1,9 @@
 'use client'
-import DeleteNoteDialog from '@/ui/components/DeleteNoteDialog'
+
 import { useState } from 'react'
-import { Pencil, Trash2, Check, X } from 'lucide-react'
+import { Pencil, Check, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import DeleteNoteDialog from '@/ui/components/DeleteNoteDialog'
 
 type NoteRowProps = {
   id: string
@@ -29,10 +30,10 @@ export default function NoteRow({
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(title)
   const [isSaving, setIsSaving] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleSave = async () => {
     const trimmed = editValue.trim()
+
     if (!trimmed || trimmed === title) {
       setIsEditing(false)
       setEditValue(title)
@@ -47,12 +48,6 @@ export default function NoteRow({
       setIsSaving(false)
     }
   }
-     {/* عنوان الحذف */}
-<DeleteNoteDialog
-  noteId={id}
-  noteTitle={title}
-  onConfirm={onDelete}
-/>
 
   return (
     <div className="grid grid-cols-[2fr_1fr_1fr_120px_180px] items-center border-b border-slate-700 py-3 px-3 hover:bg-slate-800/40 transition">
@@ -126,7 +121,12 @@ export default function NoteRow({
             تعديل
           </button>
         )}
-        
+
+        <DeleteNoteDialog
+          noteId={id}
+          noteTitle={title}
+          onConfirm={onDelete}
+        />
       </div>
     </div>
   )
