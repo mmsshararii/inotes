@@ -63,13 +63,18 @@ export default function NoteRow({
               autoFocus
             />
 
-            <button
+<button
   onClick={handleSave}
   disabled={isSaving}
-  className="flex items-center justify-center rounded-md bg-green-600/15 px-2 py-2 text-green-400 hover:bg-green-600/25 hover:text-green-300 disabled:opacity-50"
+  className="flex items-center justify-center rounded-md px-2 py-2 disabled:opacity-50"
+  style={{ backgroundColor: 'transparent' }}
   title="حفظ التعديل"
 >
-  <CheckCircle2 size={20} strokeWidth={2.4} />
+  <CheckCircle2
+    size={20}
+    strokeWidth={2.4}
+    style={{ color: '#2be9c7' }}
+  />
 </button>
 
             <button
